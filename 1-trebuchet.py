@@ -1026,8 +1026,7 @@ for line in input_string.split("\n"):
     str_digit = str(current_number[0] + current_number[-1])
     resulting_numbers.append(int(str_digit))
 
-answer1 = sum(resulting_numbers)
-print(answer1)
+human_answer_1 = sum(resulting_numbers)
 
 
 def digit_locations(line: str):
@@ -1051,5 +1050,73 @@ for line in input_string.split("\n"):
     first, last = min(locs.keys()), max(locs.keys())
     resulting_numbers.append(int(str(locs[first]) + str(locs[last])))
 
-answer2 = sum(resulting_numbers)
-print(answer2)
+human_answer_2 = sum(resulting_numbers)
+
+
+## AI Version:
+def sum_calibration_values_from_file(data: str):
+    total_sum = 0
+    for line in data.split("\n"):
+        # Extract the first and last digits from each line
+        first_digit = next((char for char in line if char.isdigit()), None)
+        last_digit = next((char for char in reversed(line) if char.isdigit()), None)
+
+        # Combine the first and last digits to form a two-digit number, if both digits are found
+        if first_digit and last_digit:
+            calibration_value = int(first_digit + last_digit)
+            total_sum += calibration_value
+
+    return total_sum
+
+
+ai_answer_1 = sum_calibration_values_from_file(input_string)
+
+
+def convert_spelled_out_numbers_to_digits(text):
+    number_words = {
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "six": "6",
+        "seven": "7",
+        "eight": "8",
+        "nine": "9",
+    }
+    for word, digit in number_words.items():
+        text = text.replace(word, digit)
+    return text
+
+
+def sum_real_calibration_values_from_file(data: str):
+    total_sum = 0
+    for line in data.split("\n"):
+        # Convert spelled out numbers to digits
+        line_with_digits = convert_spelled_out_numbers_to_digits(line)
+
+        # Extract the first and last digits from each line
+        first_digit = next(
+            (char for char in line_with_digits if char.isdigit()), None
+        )
+        last_digit = next(
+            (char for char in reversed(line_with_digits) if char.isdigit()), None
+        )
+
+        # Combine the first and last digits to form a two-digit number, if both digits are found
+        if first_digit and last_digit:
+            calibration_value = int(first_digit + last_digit)
+            total_sum += calibration_value
+
+    return total_sum
+
+
+ai_answer_2 = sum_real_calibration_values_from_file(input_string)
+
+
+print(f"Human Answer 1: {human_answer_1}")
+print(f"AI Answer 1: {ai_answer_1}")
+print(f"Human Answer 2: {human_answer_2}")
+print(f"AI Answer 2: {ai_answer_2}")
+print(f"Human Answer 1 == AI Answer 1: {human_answer_1 == ai_answer_1}")
+print(f"Human Answer 2 == AI Answer 2: {human_answer_2 == ai_answer_2}")
